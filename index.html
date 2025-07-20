@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Creative AI Platform</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Orbitron:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+  <style>
+    * {
+      font-family: 'Poppins', sans-serif;
+      cursor: none;
+    }
+
+    body {
+      margin: 0;
+      overflow-x: hidden;
+      background: #0e0e0e;
+      color: #fff;
+      position: relative;
+    }
+
+    #particles-js, #vanta-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -2;
+    }
+
+    .section {
+      position: relative;
+      z-index: 1;
+      padding: 120px 20px;
+    }
+
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg, #0e0e0e, #1a1a2e, #16213e, #0e0e0e);
+      background-size: 400% 400%;
+      animation: gradientShift 20s ease infinite;
+      z-index: -3;
+    }
+
+    .cursor {
+      position: fixed;
+      width: 20px;
+      height: 20px;
+      background: radial-gradient(circle, rgba(154, 134, 253, 0.8), transparent);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: transform 0.1s ease;
+    }
+
+    .cursor.active {
+      transform: translate(-50%, -50%) scale(1.5);
+    }
+
+    .hero {
+      background: transparent;
+      text-align: center;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hologram-text {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 3.5rem;
+      color: #9a86fd;
+      text-shadow: 0 0 10px rgba(154, 134, 253, 0.8), 0 0 20px rgba(154, 134, 253, 0.6);
+      animation: flicker 4s infinite;
+    }
+
+    @keyframes flicker {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.8; }
+    }
+
+    .floating-3d {
+      position: absolute;
+      z-index: 0;
+      opacity: 0.5;
+      animation: float3d 10s infinite ease-in-out;
+    }
+
+    @keyframes float3d {
+      0% { transform: translateY(0) rotateX(0deg) rotateY(0deg); }
+      50% { transform: translateY(-40px) rotateX(180deg) rotateY(180deg); }
+      100% { transform: translateY(0) rotateX(360deg) rotateY(360deg); }
+    }
+
+    .parallax {
+      background-attachment: fixed;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+      min-height: 400px;
+      position: relative;
+    }
+
+    .parallax::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 0;
+    }
+
+    .parallax-content {
+      position: relative;
+      z-index: 1;
+      color: #fff;
+      text-align: center;
+      padding: 100px 20px;
+    }
+
+    .feature-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+      transition: transform 0.4s ease, box-shadow 0.3s, background 0.3s;
+      color: #fff;
+      position: relative;
+      overflow: hidden;
+      perspective: 1000px;
+    }
+
+    .feature-card:hover {
+      transform: scale(1.1) translateZ(20px);
+      box-shadow: 0 15px 30px rgba(154, 134, 253, 0.5);
+      background: rgba(154, 134, 253, 0.1);
+    }
+
+    .feature-icon {
+      font-size: 2.5rem;
+      transition: transform 0.5s ease, color 0.3s;
+    }
+
+    .feature-card:hover .feature-icon {
+      transform: scale(1.3) rotate(10deg);
+      color: #9a86fd;
+      animation: bounce 0.5s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: scale(1.3) translateY(0); }
+      50% { transform: scale(1.3) translateY(-10px); }
+    }
+
+    .btn {
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s, box-shadow 0.3s;
+      font-family: 'Orbitron', sans-serif;
+    }
+
+    .btn::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      transition: width 0.4s, height 0.4s;
+    }
+
+    .btn:hover::after {
+      width: 200px;
+      height: 200px;
+    }
+
+    .btn:hover {
+      transform: scale(1.1) translateZ(10px);
+      box-shadow: 0 5px 15px rgba(154, 134, 253, 0.5);
+    }
+
+    .btn:active {
+      transform: scale(0.95);
+    }
+
+    .navbar {
+      background: rgba(14, 14, 14, 0.9);
+      animation: slide-down 1s ease-out;
+    }
+
+    @keyframes slide-down {
+      0% { transform: translateY(-100%); }
+      100% { transform: translateY(0); }
+    }
+
+    .nav-link {
+      position: relative;
+      transition: color 0.3s;
+    }
+
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: -5px;
+      left: 0;
+      background: #9a86fd;
+      transition: width 0.3s ease;
+    }
+
+    .nav-link:hover::after {
+      width: 100%;
+    }
+
+    .nav-link:hover {
+      color: #9a86fd;
+    }
+
+    .testimonial-carousel {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 16px;
+      padding: 20px;
+    }
+
+    .testimonial-text {
+      font-size: 1.5rem;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .testimonial-author {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 20px;
+    }
+
+    .testimonial-author img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+
+    .faq-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .faq-item {
+      margin-bottom: 15px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .faq-question {
+      padding: 15px;
+      font-weight: 600;
+      color: #fff;
+      cursor: pointer;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    .faq-question:hover {
+      background: rgba(154, 134, 253, 0.1);
+      color: #9a86fd;
+    }
+
+    .faq-answer {
+      max-height: 0;
+      padding: 0 15px;
+      background: rgba(255, 255, 255, 0.05);
+      overflow: hidden;
+      transition: max-height 0.3s ease, padding 0.3s ease;
+    }
+
+    .faq-item.active .faq-answer {
+      max-height: 200px;
+      padding: 15px 15px;
+    }
+
+    .back-to-top {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: #9a86fd;
+      color: #fff;
+      padding: 15px;
+      border-radius: 50%;
+      text-decoration: none;
+      display: none;
+      animation: bounce-up 2s infinite;
+    }
+
+    @keyframes bounce-up {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .hologram-text, .feature-card, .btn, .navbar, .floating-3d, .back-to-top, body::before {
+        animation: none;
+        transition: none;
+      }
+      .nav-link::after, .btn::after {
+        display: none;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .hologram-text {
+        font-size: 2rem;
+      }
+      .section {
+        padding: 60px 15px;
+      }
+      .floating-3d {
+        display: none;
+      }
+      .cursor {
+        display: none;
+      }
+      .testimonial-text {
+        font-size: 1.2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="particles-js"></div>
+  <div id="vanta-bg"></div>
+  <div class="cursor"></div>
+
+  <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="#">Creative AI</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="#features">Features</a></li>
+          <li class="nav-item"><a class="nav-link" href="#how-it-works">How It Works</a></li>
+          <li class="nav-item"><a class="nav-link" href="#testimonials">Testimonials</a></li>
+          <li class="nav-item"><a class="nav-link" href="#faq">FAQ</a></li>
+          <li class="nav-item"><a class="nav-link" href="#pricing">Pricing</a></li>
+          <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <section class="section hero" aria-labelledby="hero-title">
+    <div class="container" data-aos="fade-in">
+      <img src="image/logo.jpg" alt="Creative AI Logo" class="img-fluid mb-4" style="max-width: 200px;">
+      <h1 id="hero-title" class="hologram-text">Creative AI Platform</h1>
+      <p class="lead">Where imagination meets innovation.</p>
+      <a href="#features" class="btn btn-light btn-lg" data-aos="fade-in" data-aos-delay="300">Explore Now</a>
+    </div>
+    <svg class="floating-3d" style="top: 20%; left: 10%; width: 100px; height: 100px;" viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="40" fill="#9a86fd" />
+    </svg>
+    <svg class="floating-3d" style="top: 70%; right: 15%; width: 80px; height: 80px;" viewBox="0 0 100 100">
+      <polygon points="50,10 90,90 10,90" fill="#9a86fd" />
+    </svg>
+  </section>
+
+  <section class="parallax" style="background-image: url('https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1920&q=80');">
+    <div class="parallax-content">
+      <h2>Transform Your Ideas into Reality</h2>
+      <p>Experience the future of creativity with AI.</p>
+    </div>
+  </section>
+
+  <section class="section" id="features">
+    <div class="container">
+      <h2 class="text-center fw-bold mb-5" data-aos="fade-in">Features</h2>
+      <div class="row g-4">
+        <div class="col-md-3" data-aos="zoom-in">
+          <div class="p-4 feature-card">
+            <div class="feature-icon">⚡</div>
+            <h3>Fast Content Creation</h3>
+            <p>Generate high-quality content in minutes with AI-powered tools.</p>
+          </div>
+        </div>
+        <div class="col-md-3" data-aos="zoom-in" data-aos-delay="100">
+          <div class="p-4 feature-card">
+            <div class="feature-icon">🤝</div>
+            <h3>Real-time Collaboration</h3>
+            <p>Work seamlessly with your team in real-time.</p>
+          </div>
+        </div>
+        <div class="col-md-3" data-aos="zoom-in" data-aos-delay="200">
+          <div class="p-4 feature-card">
+            <div class="feature-icon">🎨</div>
+            <h3>Design Templates</h3>
+            <p>Start with customizable, professional templates.</p>
+          </div>
+        </div>
+        <div class="col-md-3" data-aos="zoom-in" data-aos-delay="300">
+          <div class="p-4 feature-card">
+            <div class="feature-icon">📊</div>
+            <h3>Smart Analytics</h3>
+            <p>Track engagement with real-time insights.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="how-it-works">
+    <div class="container">
+      <h2 class="text-center fw-bold mb-5" data-aos="fade-in">How It Works</h2>
+      <div class="row g-4">
+        <div class="col-md-4" data-aos="zoom-in">
+          <div class="p-4 feature-card">
+            <h3>Step 1: Choose or Create</h3>
+            <p>Select from professional templates or start with a blank canvas.</p>
+          </div>
+        </div>
+        <div class="col-md-4" data-aos="zoom-in" data-aos-delay="100">
+          <div class="p-4 feature-card">
+            <h3>Step 2: AI-Powered Creation</h3>
+            <p>Use our intelligent tools to generate and refine your content.</p>
+          </div>
+        </div>
+        <div class="col-md-4" data-aos="zoom-in" data-aos-delay="200">
+          <div class="p-4 feature-card">
+            <h3>Step 3: Collaborate and Share</h3>
+            <p>Work with your team in real-time and share your creations easily.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="testimonials">
+    <div class="container">
+      <h2 class="text-center fw-bold mb-5" data-aos="fade-in">Testimonials</h2>
+      <div id="testimonialCarousel" class="carousel slide testimonial-carousel" data-bs-ride="carousel" data-bs-interval="5000" data-aos="fade-in">
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <p class="testimonial-text">"Creative AI has transformed my design process. The AI tools are incredibly intuitive and powerful."</p>
+            <div class="testimonial-author">
+              <img src="image/jane.jpg" alt="Jane Doe" class="rounded-circle">
+              <span>Jane Doe, Graphic Designer</span>
+            </div>
+          </div>
+          <div class="carousel-item">
+            <p class="testimonial-text">"The real-time collaboration feature has streamlined our team's workflow."</p>
+            <div class="testimonial-author">
+              <img src="image/john.jpg" alt="John Smith" class="rounded-circle">
+              <span>John Smith, Project Manager</span>
+            </div>
+          </div>
+          <div class="carousel-item">
+            <p class="testimonial-text">"Smart analytics helped us understand our audience better."</p>
+            <div class="testimonial-author">
+              <img src="image/emily.jpg" alt="Emily Johnson" class="rounded-circle">
+              <span>Emily Johnson, Content Strategist</span>
+            </div>
+          </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="faq">
+    <div class="container">
+      <h2 class="text-center fw-bold mb-5" data-aos="fade-in">Frequently Asked Questions</h2>
+      <ul class="faq-list" data-aos="fade-in">
+        <li class="faq-item">
+          <div class="faq-question">What is Creative AI?</div>
+          <div class="faq-answer">
+            Creative AI is a cutting-edge platform that harnesses the power of artificial intelligence to revolutionize the creative process. It offers a suite of tools and features designed to enhance creativity, streamline workflows, and unlock new possibilities for designers, artists, and content creators.
+          </div>
+        </li>
+        <li class="faq-item">
+          <div class="faq-question">How much does it cost?</div>
+          <div class="faq-answer">
+            Creative AI offers flexible pricing plans to suit different needs and budgets. Our Starter plan is $29/month, the Pro plan is $99/month, and we also have custom Enterprise solutions. Visit our Pricing section for more details.
+          </div>
+        </li>
+        <li class="faq-item">
+          <div class="faq-question">Is there a free trial?</div>
+          <div class="faq-answer">
+            Yes, we offer a 14-day free trial for new users. This allows you to explore the platform's features and see how it can benefit your creative projects before committing to a paid plan.
+          </div>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section" id="pricing">
+    <div class="container">
+      <h2 class="text-center fw-bold mb-5" data-aos="fade-in">Pricing</h2>
+      <div class="row g-4">
+        <div class="col-md-4" data-aos="fade-in">
+          <div class="p-4 text-center feature-card">
+            <h3>Starter</h3>
+            <p class="price">$29/mo</p>
+            <ul class="list-unstyled">
+              <li>Basic AI Tools</li>
+              <li>10 Projects/Month</li>
+              <li>Email Support</li>
+            </ul>
+            <a href="#" class="btn btn-light">Choose Plan</a>
+          </div>
+        </div>
+        <div class="col-md-4" data-aos="fade-in" data-aos-delay="100">
+          <div class="p-4 text-center feature-card">
+            <h3>Pro</h3>
+            <p class="price">$99/mo</p>
+            <ul class="list-unstyled">
+              <li>Advanced AI Tools</li>
+              <li>Unlimited Projects</li>
+              <li>Priority Support</li>
+            </ul>
+            <a href="#" class="btn btn-light">Choose Plan</a>
+          </div>
+        </div>
+        <div class="col-md-4" data-aos="fade-in" data-aos-delay="200">
+          <div class="p-4 text-center feature-card">
+            <h3>Enterprise</h3>
+            <p class="price">Contact Us</p>
+            <ul class="list-unstyled">
+              <li>Custom AI Solutions</li>
+              <li>Dedicated Manager</li>
+              <li>API Access</li>
+            </ul>
+            <a href="#" class="btn btn-light">Choose Plan</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="bg-black text-light py-4" id="contact">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <p>© 2025 Creative AI Platform. All rights reserved.</p>
+          <p><a href="#" class="text-light">Privacy Policy</a> | <a href="#" class="text-light">Terms of Service</a></p>
+        </div>
+        <div class="col-md-6 text-md-end">
+          <p>Follow us: 
+            <a href="#" class="text-light">Facebook</a> | 
+            <a href="#" class="text-light">Twitter</a> | 
+            <a href="#" class="text-light">Instagram</a>
+          </p>
+          <p>Contact us: <a href="mailto:info@creativeai.com" class="text-light">info@creativeai.com</a></p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <a href="#" class="back-to-top">↑</a>
+
+  <script src="https://cdn.jsdelivr.net/npm/particles.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r121/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vanta/dist/vanta.net.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+  <script>
+    AOS.init({
+      duration: 1200,
+      easing: 'ease-out-back',
+      once: false,
+    });
+
+    VANTA.NET({
+      el: "#vanta-bg",
+      mouseControls: true,
+      touchControls: true,
+      gyroControls: false,
+      minHeight: 200.00,
+      minWidth: 200.00,
+      scale: 1.00,
+      scaleMobile: 1.00,
+      color: 0x9a86fd,
+      backgroundColor: "transparent",
+      points: 15,
+      maxDistance: 20,
+      spacing: 15
+    });
+
+    particlesJS.load('particles-js', 'https://cdn.jsdelivr.net/gh/VincentGarreau/particles.js@master/demo/particles.json');
+
+    const cursor = document.querySelector('.cursor');
+    document.addEventListener('mousemove', (e) => {
+      cursor.style.left = `${e.clientX}px`;
+      cursor.style.top = `${e.clientY}px`;
+    });
+    document.addEventListener('mousedown', () => cursor.classList.add('active'));
+    document.addEventListener('mouseup', () => cursor.classList.remove('active'));
+
+    document.addEventListener("mousemove", (e) => {
+      const sparkle = document.createElement("div");
+      sparkle.className = "sparkle";
+      sparkle.style.left = `${e.clientX}px`;
+      sparkle.style.top = `${e.clientY}px`;
+      document.body.appendChild(sparkle);
+      setTimeout(() => sparkle.remove(), 600);
+    });
+
+    window.addEventListener('scroll', () => {
+      const backToTop = document.querySelector('.back-to-top');
+      if (window.scrollY > 300) {
+        backToTop.style.display = 'block';
+      } else {
+        backToTop.style.display = 'none';
+      }
+    });
+
+    document.querySelector('.back-to-top').addEventListener('click', (e) => {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    document.querySelectorAll('.feature-card').forEach(card => {
+      card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        card.style.transform = `perspective(1000px) rotateX(${(y - rect.height / 2) / 20}deg) rotateY(${(x - rect.width / 2) / 20}deg) scale(1.1)`;
+      });
+      card.addEventListener('mouseleave', () => {
+        card.style.transform = 'scale(1)';
+      });
+    });
+
+    document.querySelectorAll('.btn').forEach(button => {
+      button.addEventListener('click', () => {
+        const audio = new Audio('https://www.soundjay.com/button/button-1.mp3');
+        audio.play();
+      });
+    });
+
+    document.querySelectorAll('.faq-question').forEach(question => {
+      question.addEventListener('click', () => {
+        const item = question.parentElement;
+        item.classList.toggle('active');
+      });
+    });
+  </script>
+</body>
+</html>
